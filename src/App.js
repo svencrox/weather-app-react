@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import moment from "moment";
 import {
   WiDaySunny,
@@ -30,10 +29,12 @@ function App() {
       setError(null);
 
       try {
-        const response = await axios.get(
+        const response = await fetch(
           "https://api.openweathermap.org/data/2.5/weather?q=Malaysia&appid=22d965a266f7666e1d9f5621156c26d7&units=metric"
         );
-        setWeatherData(response.data);
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+        const data = await response.json();
+        setWeatherData(data);
       } catch (error) {
         setError(error.message);
       }
